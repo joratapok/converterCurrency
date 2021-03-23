@@ -3,17 +3,22 @@ import CoupleCurrency from "./CoupleCurrency/CoupleCurrency";
 import classes from './Converter.module.css'
 import HeaderContainer from "./Header/HeaderContainer";
 import {connect} from "react-redux";
-import {deleteCouple, setNewCouple} from "../../redux/converterReducer";
+import {deleteCouple, setNewCouple, chooseCurrency,
+  setCalculatingValueThunk, setValueTwoWithFlagThunk} from "../../redux/converterReducer";
 
 class Converter extends React.Component {
     render() {
         return (
             <div className={classes.converterWrapper}>
                 <HeaderContainer/>
-                <div>
+                <div className={classes.coupleWrapper}>
                     {this.props.couples.map( couple => <CoupleCurrency countries={this.props.countries}
                                                                        deleteCouple={this.props.deleteCouple}
-                                                                       couple={couple}/>)}
+                                                                       chooseCurrency={this.props.chooseCurrency}
+                                                                       setCalculatingValueThunk={this.props.setCalculatingValueThunk}
+                                                                       setValueTwoWithFlagThunk={this.props.setValueTwoWithFlagThunk}
+                                                                       couple={couple}
+                                                                       />)}
                 </div>
             </div>
         )
@@ -25,4 +30,5 @@ let mapStateToProps = (state) => ({
     countries: state.converter.countries
 })
 
-export default connect(mapStateToProps, {setNewCouple, deleteCouple})(Converter);
+export default connect(mapStateToProps, {setNewCouple, deleteCouple,
+   chooseCurrency, setCalculatingValueThunk, setValueTwoWithFlagThunk})(Converter);
