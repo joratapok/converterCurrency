@@ -13,8 +13,8 @@ const Flags = (props) => {
                     }>
                     <img onClick={() => {
                         (props.numberOfCountry === 'countryOne')
-                            ? props.setValueTwoWithFlagThunk(props.id, c.currency, props.countryTwo, props.numberOfCountry, props.valueOne)
-                            : props.setValueTwoWithFlagThunk(props.id, props.countryOne, c.currency, props.numberOfCountry, props.valueOne)
+                            ? props.setValueTwoWithFlagThunk(props.id, c.currency, props.countryTwo,  props.valueOne)
+                            : props.setValueTwoWithFlagThunk(props.id, props.countryOne, c.currency,  props.valueOne)
                     }}
                          className={classes.flag} src={c.ikon} alt={c.currency}/>
                 </div>

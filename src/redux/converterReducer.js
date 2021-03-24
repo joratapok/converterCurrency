@@ -8,15 +8,16 @@ const DEL_COUPLE = 'DEL_COUPLE'
 const CHOOSE_CURRENCY = 'CHOOSE_CURRENCY'
 const POINT_VALUE = 'POINT_VALUE'
 const SET_FACTOR = 'SET_FACTOR'
+const CREATE_NEW_INITIAL_STATE = 'CREATE_NEW_INITIAL_STATE'
 
 let initial = {
     couples: [
         {
-            id: 0, countryOne: 'RUB', valueOne: 1,
+            id: 1, countryOne: 'RUB', valueOne: 1,
             countryTwo: 'EUR', valueTwo: 1, factor: 1
         },
         {
-            id: 1, countryOne: 'RUB', valueOne: 1,
+            id: 2, countryOne: 'RUB', valueOne: 1,
             countryTwo: 'USD', valueTwo: 1, factor: 1
         },
     ],
@@ -25,7 +26,7 @@ let initial = {
         {currency: 'USD', ikon: usaFlag},
         {currency: 'EUR', ikon: euroFlag},
     ],
-    idCounter: 2,
+    idCounter: 3,
 }
 
 const converterReducer = (state = initial, action) => {
@@ -38,7 +39,7 @@ const converterReducer = (state = initial, action) => {
             return {
                 ...state,
                 couples: [...state.couples, newObj],
-                idCounter: action.id + 1
+                idCounter: parseInt(action.id) + 1
             }
         case (DEL_COUPLE) :
             return {
@@ -54,9 +55,8 @@ const converterReducer = (state = initial, action) => {
                     if (el.id != action.id) {
                         return el
                     } else {
-                        (action.numberOfCountry === 'countryOne')
-                            ? el.countryOne = action.countryOne
-                            : el.countryTwo = action.countryTwo
+                        el.countryOne = action.countryOne
+                        el.countryTwo = action.countryTwo
                     }
                     return el
                 })],
@@ -87,6 +87,12 @@ const converterReducer = (state = initial, action) => {
                     return el
                 })],
             }
+        case (CREATE_NEW_INITIAL_STATE) :
+            return {
+                ...state,
+                couples: JSON.parse(action.localData),
+                idCounter: parseInt(action.idCounter) + 1
+            }
         default :
             return state
     }
@@ -100,6 +106,9 @@ export const chooseCurrency = (id, countryOne, countryTwo, numberOfCountry) => (
 })
 export const pointValue = (id, currentValue, numberOfValue) => ({
     type: POINT_VALUE, id, currentValue, numberOfValue
+})
+export const createNewInitialState = (localData, idCounter) => ({
+    type: CREATE_NEW_INITIAL_STATE, localData, idCounter
 })
 
 const calculate = (a, b) => {
@@ -116,15 +125,15 @@ export const createNewCoupleThunk = (id) => {
     }
 }
 
-export const setValueTwoWithFlagThunk = (id, countryOne, countryTwo, numberOfCountry, valueOne) => {
+export const setValueTwoWithFlagThunk = (id, countryOne, countryTwo, valueOne) => {
     return async (dispatch) => {
         let response = (countryOne === countryTwo)
             ? 1
             : await currenciesApi.getCoupleCurrencies(countryOne, countryTwo)
         let factor = response
         dispatch(setFactor(id, factor))
-        dispatch(pointValue(id, calculate(valueOne, factor), 'valueTwo'))
-        dispatch(chooseCurrency(id, countryOne, countryTwo, numberOfCountry))
+        dispatch(setCalculatingValueThunk(id, valueOne, 'valueOne', factor))
+        dispatch(chooseCurrency(id, countryOne, countryTwo))
     }
 }
 
@@ -132,10 +141,18 @@ export const setCalculatingValueThunk = (id, currentValue, numberOfValue, factor
     return (dispatch) => {
         if (numberOfValue === 'valueOne') {
             dispatch(pointValue(id, currentValue, 'valueOne'))
-            dispatch(pointValue(id, calculate(currentValue, factor), 'valueTwo'))
+            if (currentValue < 0) {
+                dispatch(pointValue(id, 0, 'valueTwo'))
+            } else {
+                dispatch(pointValue(id, calculate(currentValue, factor), 'valueTwo'))
+            }
         } else if (numberOfValue === 'valueTwo') {
             dispatch(pointValue(id, currentValue, 'valueTwo'))
-            dispatch(pointValue(id, (currentValue / factor).toFixed(4), 'valueOne'))
+            if (currentValue < 0) {
+                dispatch(pointValue(id, 0, 'valueOne'))
+            } else {
+                dispatch(pointValue(id, (currentValue / factor).toFixed(4), 'valueOne'))
+            }
         }
     }
 }
