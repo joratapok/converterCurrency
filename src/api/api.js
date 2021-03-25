@@ -12,9 +12,4 @@ export const currenciesApi = {
           return response.data[key]
         } )
     },
-    GetCoupleCurrencies(firstCurrency, secondCurrency) {
-      let key = `${firstCurrency}${secondCurrency}`
-        return instance.get(`&currencies=${firstCurrency},${secondCurrency}`)
-        .then(response => response)
-    },
 }

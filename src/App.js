@@ -6,11 +6,14 @@ import {connect} from "react-redux";
 
 class App extends React.Component {
 
-    componentDidMount() {
-        this.props.couples.map(el => {
-            this.props.setValueTwoWithFlagThunk(el.id, el.countryOne, el.countryTwo, el.valueOne)
+
+    setCurrentState(data) {
+        data.forEach(el => {
+            this.props.setValueTwoWithFlagThunk(el.id, el.countryOne, el.countryTwo, 'countryOne', el.valueOne)
         })
     }
+
+
 
     render() {
         return (
