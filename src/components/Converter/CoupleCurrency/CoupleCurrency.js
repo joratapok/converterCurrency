@@ -12,7 +12,7 @@ const CoupleCurrency = (props) => {
                        countryTwo={props.couple.countryTwo} setValueTwoWithFlagThunk={props.setValueTwoWithFlagThunk}
                        id={props.couple.id} numberOfCountry={'countryOne'} valueOne={props.couple.valueOne}/>
                 <Input couple={props.couple} setCalculatingValueThunk={props.setCalculatingValueThunk}
-                       numberValue={'valueOne'} valueInput={props.couple.valueOne}/>
+                       numberValue={'valueOne'} valueInput={props.couple.valueOne} currency={props.couple.countryOne}/>
             </div>
 
             <div className={classes.coupleWrapper}>
@@ -20,7 +20,7 @@ const CoupleCurrency = (props) => {
                        countryTwo={props.couple.countryTwo} setValueTwoWithFlagThunk={props.setValueTwoWithFlagThunk}
                        id={props.couple.id} numberOfCountry={'countryTwo'} valueOne={props.couple.valueOne}/>
                 <Input couple={props.couple} setCalculatingValueThunk={props.setCalculatingValueThunk}
-                       numberValue={'valueTwo'} valueInput={props.couple.valueTwo}/>
+                       numberValue={'valueTwo'} valueInput={props.couple.valueTwo} currency={props.couple.countryTwo}/>
             </div>
             <div className={classes.xButtonWrapper}>
                 <img src={xButton} onClick={() => props.deleteCouple(props.couple.id)}
