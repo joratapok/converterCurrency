@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 class App extends React.Component {
 
     setCurrentState(data) {
-        data.map(el => {
+        data.forEach(el => {
             this.props.setValueTwoWithFlagThunk(el.id, el.countryOne, el.countryTwo, 'countryOne', el.valueOne)
         })
     }

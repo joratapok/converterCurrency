@@ -4,7 +4,7 @@ import classes from './Flags.module.css'
 const Flags = (props) => {
     return (
         <div className={classes.flagsWrapper}>
-            {props.countries.map(c => <div
+            {props.countries.map(c => <div key={c.currency}
                     className={(props.numberOfCountry === 'countryOne' && c.currency === props.countryOne)
                         ? [classes.flagWrapper, classes.activeFlag].join(' ')
                         : (props.numberOfCountry === 'countryTwo' && c.currency === props.countryTwo)

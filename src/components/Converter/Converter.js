@@ -13,12 +13,14 @@ class Converter extends React.Component {
         return (
             <div className={classes.converterWrapper}>
                 <HeaderContainer/>
-                {this.props.couples.map(couple => <CoupleCurrency countries={this.props.countries}
-                                                                  deleteCouple={this.props.deleteCouple}
-                                                                  chooseCurrency={this.props.chooseCurrency}
-                                                                  setCalculatingValueThunk={this.props.setCalculatingValueThunk}
-                                                                  setValueTwoWithFlagThunk={this.props.setValueTwoWithFlagThunk}
-                                                                  couple={couple}
+                {this.props.couples.map(couple => <CoupleCurrency
+                    key={couple.id}
+                    countries={this.props.countries}
+                    deleteCouple={this.props.deleteCouple}
+                    chooseCurrency={this.props.chooseCurrency}
+                    setCalculatingValueThunk={this.props.setCalculatingValueThunk}
+                    setValueTwoWithFlagThunk={this.props.setValueTwoWithFlagThunk}
+                    couple={couple}
                 />)}
             </div>
         )
