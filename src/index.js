@@ -7,7 +7,7 @@ import store from "./redux/redux-store";
 
 ReactDOM.render(
     <App store={store}/>,
-  document.getElementById('root')
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

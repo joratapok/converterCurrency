@@ -44,15 +44,13 @@ const converterReducer = (state = initial, action) => {
         case (DEL_COUPLE) :
             return {
                 ...state,
-                couples: [...state.couples.filter(el => {
-                    if (el.id != action.id) return el
-                })],
+                couples: [...state.couples.filter(el => el.id !== action.id)],
             }
         case (CHOOSE_CURRENCY) :
             return {
                 ...state,
                 couples: [...state.couples.filter(el => {
-                    if (el.id != action.id) {
+                    if (el.id !== action.id) {
                         return el
                     } else {
                         el.countryOne = action.countryOne
@@ -65,7 +63,7 @@ const converterReducer = (state = initial, action) => {
             return {
                 ...state,
                 couples: [...state.couples.filter(el => {
-                    if (el.id != action.id) {
+                    if (el.id !== action.id) {
                         return el
                     } else {
                         (action.numberOfValue === 'valueOne')
@@ -79,7 +77,7 @@ const converterReducer = (state = initial, action) => {
             return {
                 ...state,
                 couples: [...state.couples.filter(el => {
-                    if (el.id != action.id) {
+                    if (el.id !== action.id) {
                         return el
                     } else {
                         el.factor = action.factor
@@ -111,25 +109,43 @@ export const createNewInitialState = (localData, idCounter) => ({
     type: CREATE_NEW_INITIAL_STATE, localData, idCounter
 })
 
-const calculate = (a, b) => {
+const multiply = (a, b) => {
     return (a * b).toFixed(4)
+}
+const devide = (a, b) => {
+    if (b === 0) {
+        return 0
+    }
+    return (a / b).toFixed(4)
 }
 
 export const createNewCoupleThunk = (id) => {
     return async (dispatch) => {
+        let response
         dispatch(setNewCouple(id))
-        let response = await currenciesApi.getCoupleCurrencies('RUB', 'USD')
+        try {
+            response = await currenciesApi.getCoupleCurrencies('RUB', 'USD')
+        } catch (e) {
+            response = 0
+            console.log(e)
+        }
         let factor = response
         dispatch(setFactor(id, factor))
-        dispatch(pointValue(id, calculate(1, factor), 'valueTwo'))
+        dispatch(pointValue(id, multiply(1, factor), 'valueTwo'))
     }
 }
 
 export const setValueTwoWithFlagThunk = (id, countryOne, countryTwo, valueOne) => {
     return async (dispatch) => {
-        let response = (countryOne === countryTwo)
-            ? 1
-            : await currenciesApi.getCoupleCurrencies(countryOne, countryTwo)
+        let response
+        try {
+            response = (countryOne === countryTwo)
+                ? 1
+                : await currenciesApi.getCoupleCurrencies(countryOne, countryTwo)
+        } catch (e) {
+            response = 0
+            console.log(e)
+        }
         let factor = response
         dispatch(setFactor(id, factor))
         dispatch(setCalculatingValueThunk(id, valueOne, 'valueOne', factor))
@@ -144,14 +160,14 @@ export const setCalculatingValueThunk = (id, currentValue, numberOfValue, factor
             if (currentValue < 0) {
                 dispatch(pointValue(id, 0, 'valueTwo'))
             } else {
-                dispatch(pointValue(id, calculate(currentValue, factor), 'valueTwo'))
+                dispatch(pointValue(id, multiply(currentValue, factor), 'valueTwo'))
             }
         } else if (numberOfValue === 'valueTwo') {
             dispatch(pointValue(id, currentValue, 'valueTwo'))
             if (currentValue < 0) {
                 dispatch(pointValue(id, 0, 'valueOne'))
             } else {
-                dispatch(pointValue(id, (currentValue / factor).toFixed(4), 'valueOne'))
+                dispatch(pointValue(id, devide(currentValue, factor), 'valueOne'))
             }
         }
     }

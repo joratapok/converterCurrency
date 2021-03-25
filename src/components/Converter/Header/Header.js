@@ -1,7 +1,7 @@
 import React from 'react'
 import classes from './Header.module.css'
 
-const Header = ({addNewCouple, ...props}) => {
+const Header = ({addNewCouple}) => {
     return (
         <div className={classes.HeaderWrapper}>
             <div>

@@ -1,27 +1,23 @@
 import Converter from "./components/Converter/Converter";
 import {Provider} from "react-redux";
-import React from 'react';
+import React, {useEffect} from 'react';
 import {setValueTwoWithFlagThunk, createNewInitialState} from "./redux/converterReducer";
 import {connect} from "react-redux";
 
-class App extends React.Component {
 
+const App = (props) => {
 
-    setCurrentState(data) {
-        data.forEach(el => {
-            this.props.setValueTwoWithFlagThunk(el.id, el.countryOne, el.countryTwo, 'countryOne', el.valueOne)
+    useEffect(() => {
+        props.couples.forEach(el => {
+            props.setValueTwoWithFlagThunk(el.id, el.countryOne, el.countryTwo, el.valueOne)
         })
-    }
+    }, [])
 
-
-
-    render() {
-        return (
-            <Provider store={this.props.store}>
-                <Converter/>
-            </Provider>
-        );
-    }
+    return (
+        <Provider store={props.store}>
+            <Converter/>
+        </Provider>
+    );
 }
 
 let mapStateToProps = (state) => ({

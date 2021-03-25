@@ -3,20 +3,19 @@ import Header from "./Header";
 import {createNewCoupleThunk} from "../../../redux/converterReducer";
 import {connect} from "react-redux";
 
-class HeaderContainer extends React.Component {
 
-    addNewCouple = () => {
-        let newId = this.props.idCounter + 1
-        this.props.createNewCoupleThunk(newId)
+const HeaderContainer = (props) => {
+
+    let addNewCouple = () => {
+        let newId = props.idCounter + 1
+        props.createNewCoupleThunk(newId)
     }
 
-    render() {
-        return (
-            <>
-                <Header addNewCouple={this.addNewCouple}/>
-            </>
-        )
-    }
+    return (
+        <>
+            <Header addNewCouple={addNewCouple}/>
+        </>
+    )
 }
 
 let mapStateToProps = (state) => ({
